@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Inter+Tight:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#eeeeec",
+                        "surface-tint": "#55624f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#bccbb3",
+                        "on-secondary-fixed-variant": "#434840",
+                        "surface-container-highest": "#e2e3e1",
+                        "secondary-container": "#dfe4d8",
+                        "surface-container-high": "#e8e8e6",
+                        "outline": "#757871",
+                        "on-surface-variant": "#444841",
+                        "tertiary": "#412b34",
+                        "surface-variant": "#e2e3e1",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dadad8",
+                        "on-primary-fixed-variant": "#3d4a38",
+                        "on-tertiary-container": "#ceaeb9",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-container": "#acbaa3",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#61665d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "secondary-fixed": "#dfe4d8",
+                        "on-background": "#1a1c1b",
+                        "secondary": "#5b6057",
+                        "primary": "#283424",
+                        "primary-fixed": "#d8e7cf",
+                        "secondary-fixed-dim": "#c3c8bd",
+                        "on-tertiary-fixed-variant": "#584049",
+                        "surface-container-low": "#f4f4f2",
+                        "tertiary-container": "#59414a",
+                        "on-tertiary-fixed": "#29161e",
+                        "tertiary-fixed": "#fcdae5",
+                        "on-primary-fixed": "#131f10",
+                        "on-secondary-fixed": "#181d16",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c5c8bf",
+                        "primary-container": "#3e4b39",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#bccbb3",
+                        "surface": "#f9f9f7",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f9f9f7",
+                        "on-surface": "#1a1c1b",
+                        "tertiary-fixed-dim": "#dfbec9"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter Tight"],
+                        "body": ["Inter"],
+                        "label": ["Inter Tight"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        html {
+            scrollbar-gutter: stable;
+        }
+        /* 针对 iOS 或旧版浏览器的补充：防止开启抽屉时页面横移 */
+        body.drawer-open {
+            padding-right: var(--scrollbar-width, 0px);
+        }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .font-tight { font-family: 'Inter Tight', sans-serif; letter-spacing: 0.1em; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+        .grid-pattern { 
+            background-image: 
+                linear-gradient(to right, rgba(62, 75, 57, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(62, 75, 57, 0.05) 1px, transparent 1px);
+            background-size: 12px 12px;
+        }
+        .project-drawer .drawer-grid { 
+            background-image: 
+                linear-gradient(to right, rgba(62, 75, 57, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(62, 75, 57, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        #main-nav {
+            transition: background-color 0.5s ease-in-out;
+        }
+        .scrolled#main-nav {
+            background-color: #3E4B39 !important;
+        }
+        .scrolled #nav-brand {
+            color: #F9F9F7 !important;
+        }
+        .scrolled .nav-btn-active {
+            background-color: #F9F9F7 !important;
+            color: #3E4B39 !important;
+        }
+        .scrolled .nav-btn-outline {
+            border-color: #F9F9F7 !important;
+            color: #F9F9F7 !important;
+        }
+        .fade-transition {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .project-trigger {
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .project-trigger span, .project-trigger h4 {
+            transition: color 0.3s ease;
+        }
+        .project-trigger.is-active {
+            background-color: #3E4B39 !important;
+            border-color: #3E4B39 !important;
+        }
+        .project-trigger.is-active h4 {
+            color: #F9F9F7 !important;
+        }
+        .project-trigger.is-active span {
+            color: rgba(249, 249, 247, 0.5) !important;
+        }
+        .project-trigger:not(.is-active) {
+            background-color: transparent !important;
+            border-color: #3E4B39 !important;
+        }
+        .project-trigger:not(.is-active) h4 {
+            color: #3E4B39 !important;
+        }
+        .project-trigger:not(.is-active) span {
+            color: rgba(62, 75, 57, 0.3) !important;
+        }
+        /* 优化抽屉滑动性能 */
+        #drawer-content {
+            /* 开启硬件加速，让显卡接管动画 */
+             will-change: transform;
+            /* 换成更丝滑的贝塞尔曲线，取代原本生硬的移动 */
+            transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1) !important;
+        }
+        #drawer-backdrop {
+            will-change: opacity;
+            transition: opacity 0.4s linear !important;
+        }
+        /* 配合后续脚本的淡入动效，让内容出现时不突兀 */
+        .drawer-fade-in {
+             animation: drawerFadeIn 0.6s ease-out forwards;
+        }
+        @keyframes drawerFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 仅针对抽屉内部图片的强制修复 */
+        #drawer-inner-content img {
+            height: auto !important;
+            aspect-ratio: auto !important;
+            object-fit: contain !important;
+            max-height: none !important;
+        }
+
+        #drawer-inner-content div[class*='aspect-'] {
+            aspect-ratio: auto !important;
+            height: auto !important;
+        }
+    #drawer-inner-content .rounded-xl { position: relative; overflow: hidden; } #drawer-inner-content .rounded-xl::after { content: "INTERNAL USE ONLY  •  CONFIDENTIAL"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 0.5em; color: rgba(62, 75, 57, 0.05); transform: rotate(-15deg) scale(1.5); pointer-events: none; z-index: 50; white-space: nowrap; }</style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary overflow-x-hidden" data-mode="connect" style="">
+<!-- Side Drawer Overlay -->
+<div class="fixed inset-0 z-[100] project-drawer invisible" id="drawer-overlay">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-500 opacity-0" id="drawer-backdrop"></div>
+<!-- Drawer Container -->
+<div class="absolute top-0 right-0 h-full w-full md:w-[70%] bg-[#F2F2F0] drawer-grid border-l-2 border-[#3E4B39] transition-transform duration-500 overflow-y-auto translate-x-full" id="drawer-content">
+<div class="p-10 relative">
+<button class="absolute top-10 right-10 flex items-center gap-2 group z-[110]" id="drawer-close" style="">
+<span class="text-xs font-black tracking-widest text-primary/50 group-hover:text-primary transition-colors font-tight" style="">CLOSE</span>
+<span class="material-symbols-outlined text-primary" style="">close</span>
+</button>
+<div class="max-w-4xl" id="drawer-inner-content">
+<header class="mb-12 pt-24">
+<h2 class="text-4xl md:text-5xl font-black text-primary font-tight tracking-tight uppercase leading-tight mb-4 text-left" style="">麦瑞通 (Merit Medical) 360° 整合视觉战略</h2>
+<div class="h-1 w-24 bg-primary ml-0"></div>
+</header>
+<div class="space-y-12">
+<div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+<img alt="Key Visual" class="w-full h-auto object-contain" src="https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_FN_0303_1.webp" style=""/>
+</div>
+<div>
+<p class="text-base text-primary/70 leading-relaxed font-body whitespace-pre-line text-left" style="">
+                        项目背景
+
+如何让冷冰冰的医疗器械在专业市场中“出圈”？针对麦瑞通 2020 年度 KV 需求，我并未提供单一稿件，而是构建了一套“逻辑—产品—情感”三位一体的视觉矩阵。该方案最终实现三向全中标，覆盖线上、线下及 B 端全渠道应用。
+
+核心策展逻辑 (The Triple-Win Strategy)：
+
+维度 A：隐喻叙事 (2.5D Isometric)
+核心逻辑：将人体血脉比作繁忙的城市交通与错综的河道。
+视觉表达：用当下流行的 2.5D 插画风格，将抽象的手术效用具象化。导管是河道中的疏浚船，压力泵是交通枢纽。这种“视觉降维”让复杂的医学原理解析变得轻盈且极具趣味性。
+
+维度 B：工业秩序 (Top-down Flat Lay)
+核心逻辑：极致的“全家桶”展示，呼应“一站式配齐”的品牌宗旨。
+视觉表达：参考社交媒体爆火的“平铺（Knolling）”美学。通过极度理性的几何排布，展示产品的工业美感与品规的完整性，精准击中 B 端客户对专业与效率的追求。
+
+维度 C：人文叙事 (Vision-based Photography)
+核心逻辑：从工具转向结果，关注“生命律动”。
+视觉表达：捕捉术中繁忙、术后温馨的真实瞬间。通过红色的“对焦框”视觉符号，将冷色调的医疗背景与温暖的品牌关怀建立强连接，构建品牌的价值护城河。
+                    </p>
+</div>
+<div class="flex flex-col gap-8">
+<div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+<img alt="Detail 1" class="w-full h-auto object-contain" src="https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_ALL.webp" style=""/>
+</div>
+<div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+<img alt="Detail 2" class="w-full h-auto object-contain" src="https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_A_ContrastFa_ALL.webp" style=""/>
+</div>
+<div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+<img alt="Detail 3" class="w-full h-auto object-contain" src="https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_C_AspirationFa_All.webp" style=""/>
+</div>
+</div>
+<div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+<img alt="Closing Hero" class="w-full h-auto object-contain" src="https://clmm-portfolio-assets.vercel.app/brand/Merit02-ok.webp" style=""/>
+</div>
+<div class="pb-20 border-t border-primary/10 pt-8">
+<p class="text-base text-primary/70 leading-relaxed font-body whitespace-pre-line text-left" style="">
+                        项目战绩
+
+100% 中标率：三个创意方向全部被甲方采纳并商业化落地。
+全渠道覆盖：实现了品牌从数字化线上推广到线下学术会议视觉的高度统一。
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#F9F9F7]/90 backdrop-blur-md" id="main-nav">
+<div class="flex justify-between items-center px-8 py-6 max-w-[1440px] mx-auto">
+<div class="text-xl font-black tracking-[0.1em] text-[#3E4B39] uppercase font-tight leading-none" id="nav-brand" style="">CLMM STUDIO</div>
+<button class="md:hidden p-2 text-[#3E4B39]" id="mobile-menu-btn" style="">
+<span class="material-symbols-outlined" style="">menu</span>
+</button>
+<div class="hidden md:flex items-center gap-3 justify-end leading-none">
+    <a class="nav-btn nav-btn-outline text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all duration-300 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="index.html">HOME</a>
+    <a class="nav-btn nav-btn-active bg-[#3E4B39] text-[#F9F9F7] rounded-full w-24 py-2 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="work.html">WORK</a>
+    <a class="nav-btn nav-btn-outline text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all duration-300 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="lab.html">LAB</a>
+</div>
+</div>
+</nav>
+<main class="pt-[72px]">
+<!-- Hero Section -->
+<header class="grid-pattern border-y border-[#3E4B39] w-full relative overflow-hidden py-12">
+<div class="px-8 max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+<div class="max-w-2xl shrink-0">
+<h1 class="text-7xl md:text-[10rem] font-black text-primary leading-[0.85] mb-0 font-tight tracking-tight uppercase" style="">WORK</h1>
+</div>
+<div class="flex-1 flex flex-col items-end text-right translate-x-12 md:translate-x-32 select-none">
+<p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight" style="">DESIGN</p>
+<p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight" style="">&amp; VISION</p>
+</div>
+</div>
+</header>
+<!-- Content Grid Sections -->
+<div>
+<!-- Section 01 BRANDING -->
+<section class="border-b border-[#3E4B39]" id="section-branding">
+<div class="grid-pattern py-8 border-b border-[#3E4B39] w-full">
+<div class="max-w-[1440px] mx-auto px-8">
+<h2 class="text-4xl font-black text-primary font-tight tracking-tight uppercase" style="">BRAND</h2>
+</div>
+</div>
+<div class="px-8 py-24 grid grid-cols-1 md:grid-cols-12 gap-12 items-start max-w-[1440px] mx-auto">
+<div class="md:col-span-8 group">
+<div class="aspect-[16/9] w-full overflow-hidden bg-surface-container-low rounded-xl pointer-events-none border border-[#3E4B39] relative">
+<img alt="Featured Branding" class="featured-image absolute inset-0 w-full h-full object-cover" data-stack-id="aura-systems" src="https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_FN_0303_1.webp" style="opacity: 1; visibility: visible;"/>
+</div>
+<div class="mt-4 w-full bg-white px-6 py-5 rounded-lg border border-[#3E4B39]">
+<h3 class="featured-title text-2xl font-black text-primary font-tight leading-none uppercase" style="">麦瑞通 (Merit Medical) 360° 整合视觉战略</h3>
+<p class="featured-meta text-[10px] font-bold tracking-[0.2em] text-primary/50 uppercase font-tight mt-2" style="">01. BRANDING / CREATIVE STRATEGY</p>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col space-y-4 pt-0 project-list" data-default-id="aura-systems">
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl is-active" data-project-id="aura-systems">
+<span class="text-[11px] font-bold font-mono" style="">01</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">麦瑞通Merit Medical</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="cardio-focus">
+<span class="text-[11px] font-bold font-mono" style="">02</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">凯德诺 HEARTLIGHT X3</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="danone-eshop">
+<span class="text-[11px] font-bold font-mono" style="">03</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">达能中国内购商城</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="arawana-ck">
+<span class="text-[11px] font-bold font-mono" style="">04</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">金龙鱼中央厨房 Concept</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 02 EVENT -->
+<section class="border-b border-[#3E4B39]" id="section-event">
+<div class="grid-pattern py-8 border-b border-[#3E4B39] w-full">
+<div class="max-w-[1440px] mx-auto px-8">
+<h2 class="text-4xl font-black text-primary font-tight tracking-tight uppercase" style="">EVENT</h2>
+</div>
+</div>
+<div class="px-8 py-24 grid grid-cols-1 md:grid-cols-12 gap-12 items-start max-w-[1440px] mx-auto">
+<div class="md:col-span-8 group">
+<div class="aspect-[16/9] w-full overflow-hidden bg-surface-container-low rounded-xl pointer-events-none border border-[#3E4B39] relative">
+<img alt="Featured Event" class="featured-image absolute inset-0 w-full h-full object-cover" data-stack-id="neon-industrial" src="https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-1.webp" style="opacity: 1; visibility: visible;"/>
+</div>
+<div class="mt-4 w-full bg-white px-6 py-5 rounded-lg border border-[#3E4B39]">
+<h3 class="featured-title text-2xl font-black text-primary font-tight leading-none uppercase" style="">纽迪希亚 (Nutricia) 第八届儿童过敏与营养论坛视觉全案</h3>
+<p class="featured-meta text-[10px] font-bold tracking-[0.2em] text-primary/50 uppercase font-tight mt-2" style="">2021 / EVENT &amp; MED</p>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col space-y-4 pt-0 project-list" data-default-id="nutricia-forum-8th"><div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl is-active" data-project-id="nutricia-forum-8th">
+<span class="text-[11px] font-bold font-mono" style="">01</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">纽迪希亚第八届论坛</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="nutricia-9-years">
+<span class="text-[11px] font-bold font-mono" style="">02</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">纽迪希亚大型活动全案</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="mdt-cs-competition">
+<span class="text-[11px] font-bold font-mono" style="">03</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">美敦力“百例挑一”挑战赛</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="mdt-coronary-6yr">
+<span class="text-[11px] font-bold font-mono" style="">04</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">美敦力冠脉事业部 6 年全案</h4>
+</div></div>
+</div>
+</section>
+<!-- Section 03 OTHER -->
+<section class="border-b border-[#3E4B39]" id="section-other">
+<div class="grid-pattern py-8 border-b border-[#3E4B39] w-full">
+<div class="max-w-[1440px] mx-auto px-8">
+<h2 class="text-4xl font-black text-primary font-tight tracking-tight uppercase" style="">OTHER</h2>
+</div>
+</div>
+<div class="px-8 py-24 grid grid-cols-1 md:grid-cols-12 gap-12 items-start max-w-[1440px] mx-auto">
+<div class="md:col-span-8 group">
+<div class="aspect-[16/9] w-full overflow-hidden bg-surface-container-low rounded-xl pointer-events-none border border-[#3E4B39] relative">
+<img alt="Featured Other" class="featured-image absolute inset-0 w-full h-full object-cover" data-stack-id="prototype-zero" src="https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_01.webp" style="opacity: 1; visibility: visible;"/>
+</div>
+<div class="mt-4 w-full bg-white px-6 py-5 rounded-lg border border-[#3E4B39]">
+<h3 class="featured-title text-2xl font-black text-primary font-tight leading-none uppercase" style="">纽迪希亚 (Nutricia) 百普力品牌战略与视觉重塑全案</h3>
+<p class="featured-meta text-[10px] font-bold tracking-[0.2em] text-primary/50 uppercase font-tight mt-2" style="">2023-2024 / BRAND STRATEGY &amp; VISUAL IDENTITY</p>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col space-y-4 pt-0 project-list" data-default-id="peptisorb-branding-2024"><div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl is-active" data-project-id="peptisorb-branding-2024">
+<span class="text-[11px] font-bold font-mono" style="">01</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">百普力品牌战略重塑</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="jnj-af-tec-2024">
+<span class="text-[11px] font-bold font-mono" style="">02</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">强生房颤技术示范中心</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="straumann-70th-csr">
+<span class="text-[11px] font-bold font-mono" style="">03</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">士卓曼70/25周年全案</h4>
+</div>
+<div class="project-trigger flex items-center gap-6 group cursor-pointer border border-[#3E4B39] px-8 py-5 w-full rounded-xl" data-project-id="phasuma-launch-2024">
+<span class="text-[11px] font-bold font-mono" style="">04</span>
+<h4 class="text-lg font-bold uppercase font-tight" style="">菲塑美中国首发上市</h4>
+</div></div>
+</div>
+</section>
+</div>
+</main>
+<footer class="w-full py-12 px-8 border-t border-primary/5">
+<div class="max-w-[1440px] mx-auto flex justify-between items-end">
+<div class="text-sm font-black tracking-[0.1em] text-primary/80 uppercase font-tight leading-none">CLMM STUDIO</div>
+<div class="flex flex-col items-end gap-1 text-right">
+<div class="text-[10px] font-black tracking-widest text-primary/40 uppercase font-tight leading-none">©2026 CLJIMMY</div>
+<p class="text-[9px] font-bold tracking-tight text-primary/30 font-tight leading-none">
+                免责声明：本网站展示之案例仅作为 CLMM STUDIO 视觉创意与技术执行之呈现 不代表品牌方之医疗主张 部分敏感数据已做脱敏处理
+            </p>
+</div>
+</div>
+</footer>
+<!-- Independent Scripts -->
+<script id="nav-logic">
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('main-nav');
+        if (nav) {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }
+    });
+
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.querySelector('.md\\:flex.items-center.gap-3');
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('hidden');
+            navLinks.classList.toggle('flex');
+            navLinks.classList.toggle('flex-col', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('absolute', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('top-full', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('left-0', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('right-0', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('bg-[#F9F9F7]', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('p-8', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('border-b', navLinks.classList.contains('flex'));
+            navLinks.classList.toggle('border-[#3E4B39]', navLinks.classList.contains('flex'));
+        });
+    }
+</script>
+<script id="data-registry">    const workRegistry = {
+        "aura-systems": {
+            title: "麦瑞通 (Merit Medical) 360° 整合视觉战略",
+            meta: "01. BRANDING / CREATIVE STRATEGY",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_FN_0303_1.webp",
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_FN_0303_1.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_B_Old5_ALL.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_A_ContrastFa_ALL.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Merit_2020_KV_C_AspirationFa_All.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Merit02-ok.webp"
+                ],
+                textA: `项目背景
+
+如何让冷冰冰的医疗器械在专业市场中“出圈”？针对麦瑞通 2020 年度 KV 需求，我并未提供单一稿件，而是构建了一套“逻辑—产品—情感”三位一体的视觉矩阵。该方案最终实现三向全中标，覆盖线上、线下及 B 端全渠道应用。
+
+核心策展逻辑 (The Triple-Win Strategy)：
+
+维度 A：隐喻叙事 (2.5D Isometric)
+核心逻辑：将人体血脉比作繁忙的城市交通与错综的河道。
+视觉表达：用当下流行的 2.5D 插画风格，将抽象的手术效用具象化。导管是河道中的疏浚船，压力泵是交通枢纽。这种“视觉降维”让复杂的医学原理解析变得轻盈且极具趣味性。
+
+维度 B：工业秩序 (Top-down Flat Lay)
+核心逻辑：极致的“全家桶”展示，呼应“一站式配齐”的品牌宗旨。
+视觉表达：参考社交媒体爆火的“平铺（Knolling）”美学。通过极度理性的几何排布，展示产品的工业美感与品规的完整性，精准击中 B 端客户对专业与效率的追求。
+
+维度 C：人文叙事 (Vision-based Photography)
+核心逻辑：从工具转向结果，关注“生命律动”。
+视觉表达：捕捉术中繁忙、术后温馨的真实瞬间。通过红色的“对焦框”视觉符号，将冷色调的医疗背景与温暖的品牌关怀建立强连接，构建品牌的价值护城河。`,
+                textB: `项目战绩
+
+100% 中标率：三个创意方向全部被甲方采纳并商业化落地。
+全渠道覆盖：实现了品牌从数字化线上推广到线下学术会议视觉的高度统一。`
+            }
+        },
+        "cardio-focus": {
+            title: "凯德诺 HEARTLIGHT X3 品牌视觉系统",
+            meta: "2024 / BRAND-MED",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-01.webp",
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/CardioFocus%20page-05.webp"
+                ],
+                textA: `项目背景
+
+HEARTLIGHT X3 作为尖端的球囊型激光消融系统，其品牌建设的核心挑战在于如何在严谨的医疗器械领域，平衡“技术硬核”与“生命关怀”的品牌感知。
+
+我们的设计策略不只是定义一个标识，而是构建一套完整的视觉语言体系。通过对品牌标准色与辅助图形的深度解构，我们为 X3 创造了一种具有流动感且精准的视觉符号。这种辅助图形不仅模拟了激光消融的能量美学，更在多维度传播中产生了极强的视觉连贯性，帮助品牌在心血管医疗这一高度专业化的细分市场中，迅速建立起国际化且前沿的视觉资产。`,
+                textB: `项目成果
+
+本项目交付了一套极具实操性的全局 VI 应用系统，覆盖了从办公到学术会议的全场景链路。
+
+在办公维度，我们统一了 PPT 演示框架与多维度产品海报的排版逻辑，确保每一次技术交流都具备品牌背书感。在更高频的学术会议场景中，我们针对背景板、专家海报、邀请函等物料制定了严格的制图标准，甚至细化到席位卡与桌布的视觉联动。这种全生命周期的视觉管理，不仅确保了 HEARTLIGHT X3 在全球市场的统一交付标准，更助力品牌在医学专家与受众中树立了坚不可摧的专业印象。`
+            }
+        },
+        "danone-eshop": {
+            title: "达能中国内购商城品牌更新与全链路营销",
+            meta: "2024 / E-COMMERCE & CAMPAIGN",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_1.webp",
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_2.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_3.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_4.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_5.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_Eshop_Page_6.webp"
+                ],
+                textA: `项目背景
+
+面对达能中国内部 E-shop brand 感知度不足、促销形式单一的挑战，我们为其量身定制了全新的品牌更新方案与 IP营销矩阵。
+
+核心策略在于打造高辨识度的“疯狂宠爱日” IP，将其转化为员工心智中的每月固定仪式感。视觉上，我们跳出了传统 F&B 品牌单调的展示框束缚，构建了一套色彩明快、充满活力的动态视觉系统。通过对不同品类（如依云、智敏捷等）的针对性视觉重构，成功将 E-shop 从一个单纯的下单工具转变为传递品牌关怀的情感纽带。`,
+                textB: `项目成果
+
+业绩爆发：通过系统化的视觉升级与活动运营，实现 E-shop 营业额年度同比上涨 37%。
+
+跨年度整合运营：2024-2025 年度，我们实现了对全年 24 个常规促销节点及春节、妇女节等重要节庆的全覆盖。
+
+多品类视觉穿透：从依云的清透到智敏捷的技术感，我们在统一营销框架下为不同产品线定制了差异化活动视觉，确保了视觉表达呈现丰富性。通过这种持续性的、高频的视觉迭代与内容产出，项目不仅达成了极高的内部转化率，更为达能积累了一套完整且可延展的电商视觉资产库。`
+            }
+        },
+        "arawana-ck": {
+            title: "金龙鱼中央厨房上市创意战略 Concept",
+            meta: "2024 / STRATEGIC CONCEPT",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_01.webp",
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_05.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Arawana_Rice_Page_06.webp"
+                ],
+                textA: `项目背景
+
+针对益海嘉里（金龙鱼）中央厨房上市初期的品牌定调需求，我们受邀为其构建第一阶段的创意视觉蓝图。核心挑战在于如何将“工业化出餐”的效率感，转化为“高品质、可追溯”的品牌信任感。
+
+我们提出的创意原型（Concept）跳出了传统餐饮的视觉范式，将“中央厨房”定义为一个透明的、数字化的生命补给系统。通过对金龙鱼母品牌的视觉基因进行二次进化，我们构建了一套极具未来感的超级符号与排版网格，旨在为这一巨轮级别的业务板块建立起坚实的视觉护城河。`,
+                textB: `项目价值
+
+本项目虽处于创意探索阶段，但其输出的视觉资产与逻辑框架为后续业务的品牌分层提供了重要参考。
+
+我们不仅完成了从 LOGO 演变到空间导视的全链路概念推演，更深入探讨了 B 端供应链与 C 端消费者的视觉连接点。这套方案代表了我们对大规模工业化餐饮美学的一次极限挑战——即在保证商业逻辑严密的前提下，赋予工业产品以高端叙事的情感温度。这种前瞻性的创意实验，为金龙鱼在中央厨房赛道的品牌表达设定了极高的基准线。`
+            }
+        },
+        "nutricia-forum-8th": {
+            title: "纽迪希亚 (Nutricia) 第八届儿童过敏与营养论坛视觉全案",
+            meta: "2021 / EVENT & MED",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-1.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-1.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-2.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-3.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-4.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Danone_NU_Page-5.webp"
+                ],
+                textA: `项目背景\n\n作为纽迪希亚（Nutricia）年度最重要的医学学术盛会，第八届论坛以“中国营响力”为核心主题，旨在探讨儿童过敏与营养领域的全球前沿研究。\n\n我们的创意挑战在于：如何在保持医疗行业“严谨、专业”底色的同时，体现品牌的“人文关怀”与“技术先锋性”。通过对主题文字的深度艺术解构，我们构建了一套基于“影响力涟漪”的视觉识别系统。将“Caring (关爱)”、“Cutting-edge (前沿)”、“Profession (专业)”三大核心关键词转化为具有流动感的视觉符号，确保了品牌信息在高度专业化的学术语境下，依然具备极强的视觉穿透力与情感共鸣。`,
+                textB: `策划与执行成果\n\n视觉资产标准化：交付了一套覆盖 KV 主视觉、论坛 ID 系统、及全系列产品的分层级视觉管控方案，确保了子品牌在统一峰会框架下的差异化呈现。\n\n全链路触点设计：项目实现了从线上数字化交互界面到线下沉浸式学术空间、乃至徽章 and 笔记本等细微物料的像素级对齐。\n\n行业标杆影响力：该案的成功落地，不仅助力纽迪希亚巩固了其在儿科过敏营养领域的权威地位，更在行业内树立了“学术内容商业化美学呈现”的高标准范本。`
+            }
+        },
+        "nutricia-9-years": {
+            title: "纽迪希亚 (Nutricia) 大型活动策划全案",
+            meta: "2016-2025 / EVENT & MED",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Nutricia_Event_Page-05.webp"
+                ],
+                textA: `项目背景\n\n这不仅是一个视觉项目，更是一次关于“品牌守护与共同成长”的长跑。自 2016 年起，我们已连续九年深度参与达能纽迪希亚（Nutricia）的品牌建设与年度盛典视觉策划。\n\n作为深耕九载的战略合作伙伴，我们承担了从品牌心智对齐到全链路视觉闭环的核心任务。在跨越九年的时间维度里，我们见证并驱动了纽迪希亚从“传统医疗视觉”向“数字驱动、人文叙事”的完整转变。面对多品牌联动的极高复杂度，我们构建了一套极具延展性的“母品牌管控系统”，在处理超大型（1,000+ 人规模）、高频次的商业活动中，展现了卓越的视觉统筹力与资源调配能力，确保了品牌形象在每一个关键增长周期始终位于行业审美的高地。`,
+                textB: `策划与执行成果\n\n全场景策划力：我们深度参与了超大型活动的行为动线策划。从线上互动 H5 预热到线下巨幕、AR 签到及沉浸式交互空间的构建，实现了 360 度全方位的品牌穿透，确保了每一场千人规模峰会都能精准传达纽迪希亚“生命早期营养”的先锋企业价值观。\n\n跨周期系统执行：在九年的合作中，我们交付了超过 2,000 余项高标准物料，实现了视觉资产的数字化管理，极大地缩短了大型活动从创意到落地的周期。\n\n顶级信任背书：该案的成功再次验证了我们在处理极高压力、多变环境下的像素级交付力.通过持续性视觉迭代，我们不仅达成了极高的内部满意度，更为达能积累了一套可追溯、可延展的品牌活动资产库。`
+            }
+        },
+        "mdt-cs-competition": {
+            title: "美敦力 (Medtronic) “百例挑一”全国瓣膜手术挑战赛全案",
+            meta: "2019-2021 / SURGICAL COMPETITION & IP BRANDING",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_1.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_1.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_2.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_3.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_4.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_SH_Page_5.webp"
+                ],
+                textA: `项目背景\n\n自首届赛事起，我们便深度参与了美敦力“百例挑一”这一极具行业影响力的全国青年医生手术挑战赛。\n\n这不仅是一场学术竞赛，更是中国心脏瓣膜手术领域的“顶级造星舞台”。我们的任务是打破医学会议枯燥的刻板印象，借鉴高端竞技节目的视觉逻辑，为青年医生构建一个彰显技术实力与职业魅力的职业高地。通过对“百例挑一”IP 视觉系统的持续迭代，我们将手术的“精准、冷静”与竞技的“热血、荣耀”完美融合，成功助力多届冠军从青年术者跃升为行业领军级人物，极大地推动了术式在国内的标准化与普及。`,
+                textB: `策划与执行成果\n\n竞技美学重构：开创性地将“极简医疗风”与“竞技工业风”相结合，打造了极具仪式感的选手出场、竞技 PK 及荣誉加冕环节，极大提升了赛事的观赏性与行业传播力。\n\n数字化赛制交互：深度参与开发了匹配复杂评审规则的实时评分展示系统与线上直播交互视觉，确保了全国级赛事在技术层面的公正性与流畅感。\n\n战略级信任背书：连续三届的成功运营，证明了我们具备从 0 到 1 构建行业顶尖 IP 的能力.该项目不仅成为美敦力在华最具代表性的学术项目之一，更在心脏外科领域确立了“手术视频竞赛”的视觉标准。`
+            }
+        },
+        "mdt-coronary-6yr": {
+            title: "美敦力 (Medtronic) 冠脉事业部 6 年周期视觉整合战略",
+            meta: "2019-2025 / PRODUCT LIFECYCLE & ANNUAL STRATEGY",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/MDT_CRDN_Page_05.webp"
+                ],
+                textA: `项目背景\n\n这是一个跨越六年、深度渗透至美敦力（Medtronic）冠脉事业部业务的品牌管理与活动策划长案。自 2019 年起，我们已连续六年负责该部门所有的年度峰会及全线重磅产品的商业化上市视觉。\n\n我们的核心使命是为这一世界领先的冠脉解决方案板块构建“权威感与创新感”并重的视觉生命体系。针对部门内部，我们先后打造了“一脉传奇”、“冠脉大航海”等极具凝聚力的年度文化 IP；针对外部市场，我们承担了全线 Branding建设，确保了生命科技的精密美学在学术交流与市场拓展中实现强有力的穿透。`,
+                textB: `策划与执行成果\n\n全线商业化赋能：完成了冠脉事业部 Total Solution 的视觉重构.针对每款新产品上市节点，我们制定了完整的视觉资产包，极大地缩短了产品的 market 导入周期。\n\n跨周期文化凝聚：连续 6 年统筹部门年会与全产品线上市发布会。通过对“铸匠心，塑非凡”这一品牌精神的视觉化演绎，我们将枯燥的产品展示转化为具有情感厚度的品牌叙事。\n\n资产系统化管理：在此长线服务中，我们累计交付了超过 3,000 余份高标准设计，构建了一套数字化“品牌视觉基因库”，在确保品牌形象统一的同时，实现了对高频学术活动的降本增效交付。`
+            }
+        },
+        "peptisorb-branding-2024": {
+            title: "纽迪希亚 (Nutricia) 百普力品牌战略与视觉重塑全案",
+            meta: "2023-2024 / BRAND STRATEGY & VISUAL IDENTITY",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_NU_LIQUID_Page_05.webp"
+                ],
+                textA: `项目背景\n\n百普力作为肠内营养短肽制剂的领军产品，在院内拥有极高的声誉与超过 50% 的市场份额 。然而，随着市场进入成熟期，品牌面临竞品概念模仿、用户感知老化等核心挑战 。\n\n我们的任务是重建百普力的品牌故事，将晦涩的“短肽分子量”科学数据转化为直观的品牌竞争力 。通过对产品力的深度拆解，我们确立了以“科学严谨性、意识能动性、普世价值性”三位一体的品牌内核 。我们不仅是在升级视觉，更是在定义“什么是最好的短肽”——即更易共情、记忆与传播的深刻表达 。`,
+                textB: `策略与创意成果\n\n核心口号“有肽度”：我们开创性地提出了“有肽度 (Peptide with Attitude)”这一双关口号。利用“肽”与“态度”的谐音，将产品的专业深度（2-3 肽含量 >75%）与纽迪希亚对行业的无限激情完美融合 。这一口号不仅朗朗上口，更在短短几秒内建立了用户对品牌“专业且可靠”的心理防线 。\n\n视觉符号化重塑：我们为品牌定制了一套极具辨识度的 3D 流体视觉系统 。将抽象的肽分子结构演化为充满生命力的紫色渐变环形符号（The Peptide Ring），并巧妙结合“大拇指”手势，在所有触点上统一传达出“赞赏与信任”的情绪能量 。\n\n全场景资产沉淀：本项目交付了一套涵盖从科室宣教到数字化交互界面的全链路视觉资产库.通过对“有肽度”这一 IP 的多维度开发，成功赋能了一线团队的商业化落地，巩固了百普力在重症营养领域的绝对领导地位 。`
+            }
+        },
+        "jnj-af-tec-2024": {
+            title: "强生医疗 (J&J MedTech) 房颤技术示范中心 (TEC) 品牌全案",
+            meta: "2024 / ACADEMIC PARTNERSHIP & HONOR SYSTEM",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/JnJ_BW_TEC_Page_05.webp"
+                ],
+                textA: `项目背景\n\n强生医疗（Johnson & Johnson MedTech）作为全球电生理领域的领导者，旨在通过“房颤技术示范中心 (TEC)”项目，联合全国各顶级医院建立标准化手术教学体系。\n\n我们的创意任务是为该项目构建一套具备“行业标杆感”与“权威学术感”的视觉识别与启动仪式系统.通过对“卓越技术 (Technique)”与“极致精神 (Excellence)”的视觉诠释，我们将复杂的医疗技术合作转化为极具荣誉感与仪式感的“TEC 授牌体系”，确保品牌在赋能临床医生的同时，树立起无可撼动的行业专业领导力。`,
+                textB: `策划与执行成果\n\n荣誉激励体系：设计并落地了一套极具质感的全国医院巡回授牌方案.通过对奖牌材质、启动装置、及仪式动线的精心策划，成功助力强生与全国数十家核心医院达成战略级技术合作，增强了专家对项目的归属感。\n\n视觉标准化输出：交付了一套从“卓越领航”主题 KV 到示范中心室内空间指引的全闭环视觉资产.无论是在大型学术会议还是医院科室，均实现了强生电生理品牌形象的高度一致与专业穿透。\n\n赋能临床价值：该项目不仅是一次启动盛典，更是一套持续运转的教育资产.我们的设计在助力临床手术技术普及的同时，大幅提升了强生房颤中心在学术界的影响力与公信力，成为了医疗器械大厂进行“院企深度共建”的视觉范本。`
+            }
+        },
+        "straumann-70th-csr": {
+            title: "士卓曼 (Straumann) 70/25 周年整合视觉与 CSR 社会责任全案",
+            meta: "2024 / BRAND HERITAGE & CSR STRATEGY",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/OTHER_Straumann_Page_05.webp"
+                ],
+                textA: `项目背景\n\n士卓曼（Straumann Group）作为全球口腔种植领域的金标准，在 2024 年迎来了全球成立 70 周年及深耕中国 25 周年的重要里程碑。\n\n我们的创意核心在于：如何让一个极度理性的牙科巨头，在这一特殊的节点传递出“人文关怀”的品牌深度？我们不仅负责 70/25 周年纪念标识的系统化应用，更深度统筹了其两大核心 CSR 战略项目——赋能女性领导力的“WIN CHINA”项目，以及联合上海市老年基金会设立的“微笑之士”专项公益基金.通过视觉的力量，我们将品牌长达 70 年的技术积淀与对社会未来的坚定承诺实现跨维度的对齐。`,
+                textB: `策略与执行成果\n\n品牌心智重塑：以“传承·创新·温度”为关键词，构建了 70/25 周年专属视觉语言.通过对士卓曼品牌色的重新定义与辅助图形开发，成功将周年庆典转化为一次面向全行业的品牌领导力输出。\n\n公益视觉赋能：针对“WIN CHINA”项目，我们打造了名为“巾帼之士”的女性领导力视觉 IP，实现了从纪录片包装到论坛视觉的 360 度覆盖；针对“微笑之士”老年公益，我们策划了极具仪式感的全国授牌仪式，大幅提升了品牌在公众层面的美誉度。\n\n数字化资产闭环：本项目交付了一套完整的数字化周年视觉资产库，涵盖了 24 个关键营销节点的社交媒体矩阵.通过系统化的视觉统筹，我们不仅帮助士卓曼缩短了公益项目的决策链路，更在这一关键的周年节点，为品牌沉淀了珍贵的情感资产与行业信任背书。`
+            }
+        },
+        "phasuma-launch-2024": {
+            title: "菲塑美 (Phasuma) 品牌中国首发上市视觉整合全案",
+            meta: "2024 / REGENERATIVE AESTHETICS & BRANDING",
+            previewImg: "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_01.webp", 
+            drawerContent: {
+                images: [
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_01.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_02.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_03.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_04.webp",
+                    "https://clmm-portfolio-assets.vercel.app/brand/Other_FITUS_Page_05.webp"
+                ],
+                textA: `项目背景\n\n菲塑美 (Phasuma) 作为进军中国再生医美市场的尖端品牌，其核心技术在于 PCL 微球驱动的自源性胶原再生 .作为品牌进入中国市场的首秀，其视觉核心痛点在于：如何平衡“生物科技的严谨性”与“高奢医美的通透感”？\n\n我们的任务是为菲塑美构建一套名为“光影叙事”的视觉识别系统.通过对 PCL 微球在组织内诱导再生的微观形态进行艺术化转译，我们打造了极具呼吸感的流体视觉语言.成功为品牌在同质化严重的再生医美赛道中，建立起一道极具辨识度的视觉护城河。`,
+                textB: `策略与执行成果\n\n视觉转译逻辑：我们通过 3D 模拟 PCL 微球的光影折射与颗粒感，创作了一系列极具通透感的平面与数字化资产（如高定邀请函、品牌形象片），显著降低了终端用户对再生类产品的认知门槛。\n\n全案标准化交付：本项目完成了从品牌初次亮相的 KV 系统到线下巡回盛典全场景物料的像素级对齐.我们制定的《视觉管控手册》，确保了菲塑美在全国多城市巡回活动中品牌质感的绝对一致。\n\n商业价值溢价：该案的成功落地，不仅助力菲塑美在上市首月即在高端医美圈层获得极高声望，更通过高品质的视觉呈现，夯实了其作为“再生医美新标杆”的品牌定位。`
+            }
+        }
+    };</script>
+<script id="drawer-logic">
+    const overlay = document.getElementById('drawer-overlay');
+    const backdrop = document.getElementById('drawer-backdrop');
+    const content = document.getElementById('drawer-content');
+    const closeBtn = document.getElementById('drawer-close');
+    const innerContent = document.getElementById('drawer-inner-content');
+
+    const buildDrawerContent = (data) => {
+        return `
+            <header class="mb-12 pt-24">
+                <h2 class="text-4xl md:text-5xl font-black text-primary font-tight tracking-tight uppercase leading-tight mb-4 text-left">${data.title}</h2>
+                <div class="h-1 w-24 bg-primary ml-0"></div>
+            </header>
+            <div class="space-y-12">
+                <div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+                    <img alt="Key Visual" class="w-full h-auto object-contain" src="${data.drawerContent.images[0]}"/>
+                </div>
+                <div>
+                    <p class="text-base text-primary/70 leading-relaxed font-body whitespace-pre-line text-left">
+                        ${data.drawerContent.textA}
+                    </p>
+                </div>
+                <div class="flex flex-col gap-8">
+                    <div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+                        <img alt="Detail 1" class="w-full h-auto object-contain" src="${data.drawerContent.images[1]}"/>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+                        <img alt="Detail 2" class="w-full h-auto object-contain" src="${data.drawerContent.images[2]}"/>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+                        <img alt="Detail 3" class="w-full h-auto object-contain" src="${data.drawerContent.images[3]}"/>
+                    </div>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-[#3E4B39] flex items-center justify-center bg-surface-container-low">
+                    <img alt="Closing Hero" class="w-full h-auto object-contain" src="${data.drawerContent.images[4]}"/>
+                </div>
+                <div class="pb-20 border-t border-primary/10 pt-8">
+                    <p class="text-base text-primary/70 leading-relaxed font-body whitespace-pre-line text-left">
+                        ${data.drawerContent.textB}
+                    </p>
+                </div>
+            </div>
+        `;
+    };
+
+    const openDrawer = (projectId) => {
+    const data = workRegistry[projectId];
+    if (!data) return;
+
+    // 1. 准备阶段：立刻显示遮罩层，锁定背景滚动
+    overlay.classList.remove('invisible');
+    document.body.classList.add('drawer-open');
+    document.body.style.overflow = 'hidden';
+
+    // 2. 占位阶段：先塞入一个极其简单的 Loading 文字，减轻滑动瞬间的渲染压力
+    innerContent.innerHTML = `
+        <div class="pt-24">
+            <h2 class="text-4xl font-black text-primary/5 uppercase font-tight">Loading...</h2>
+        </div>
+    `;
+
+    // 3. 动画启动：让几乎“空”的抽屉先滑出来（此时滑动会非常丝滑）
+    setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        content.classList.remove('translate-x-full');
+    }, 10);
+
+    // 4. 关键：延迟 180 毫秒（此时抽屉已滑出一半），再调用 heavy 的 buildDrawerContent 塞入大图
+    setTimeout(() => {
+        const fullHtml = buildDrawerContent(data);
+        // 套上一层 drawer-fade-in，配合我们刚才写的 CSS 动效
+        innerContent.innerHTML = `<div class="drawer-fade-in">${fullHtml}</div>`;
+    }, 180); 
+    };
+
+    const closeDrawer = () => {
+        backdrop.classList.add('opacity-0');
+        backdrop.classList.remove('opacity-100');
+        content.classList.add('translate-x-full');
+        setTimeout(() => {
+            overlay.classList.add('invisible');
+            document.body.classList.remove('drawer-open');
+            document.body.style.overflow = '';
+        }, 500);
+    };
+
+    backdrop.addEventListener('click', closeDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+</script>
+<script id="interaction-logic">
+    const initProjectSections = () => {
+        const sections = ['branding', 'event', 'other'];
+        
+        sections.forEach(sectionId => {
+            const section = document.getElementById(`section-${sectionId}`);
+            if (!section) return;
+
+            const triggers = section.querySelectorAll('.project-trigger');
+            const featuredImg = section.querySelector('.featured-image');
+            const featuredTitle = section.querySelector('.featured-title');
+            const featuredMeta = section.querySelector('.featured-meta');
+            const defaultId = section.querySelector('.project-list').getAttribute('data-default-id');
+
+            const updateFeatured = (projectId) => {
+                const data = workRegistry[projectId];
+                if (!data) return;
+                // Instant visibility toggle
+                section.querySelectorAll('img.featured-image').forEach(img => {
+                    // Note: In this simplified structure we update the src directly since 
+                    // the request implies a stack-id approach but the HTML only has one img element per section.
+                    // To strictly follow the requested logic for a 'stack':
+                    const isTarget = img.getAttribute('data-stack-id') === projectId;
+                    img.src = data.previewImg;
+                    img.style.opacity = "1";
+                    img.style.visibility = "visible";
+                });
+                featuredTitle.textContent = data.title;
+                featuredMeta.textContent = data.meta;
+            };
+
+            const setActiveState = (activeTrigger) => {
+                triggers.forEach(t => t.classList.remove('is-active'));
+                if (activeTrigger) {
+                    activeTrigger.classList.add('is-active');
+                }
+            };
+
+            triggers.forEach(trigger => {
+                const projectId = trigger.getAttribute('data-project-id');
+
+                trigger.addEventListener('mouseenter', () => {
+                    setActiveState(trigger);
+                    updateFeatured(projectId);
+                });
+
+                trigger.addEventListener('click', () => {
+                    openDrawer(projectId);
+                });
+            });
+
+            // Initial load for each section
+            if (defaultId) {
+                const defaultTrigger = Array.from(triggers).find(t => t.getAttribute('data-project-id') === defaultId);
+                setActiveState(defaultTrigger);
+                updateFeatured(defaultId);
+            }
+        });
+    };
+
+    initProjectSections();
+</script>
+</body></html>

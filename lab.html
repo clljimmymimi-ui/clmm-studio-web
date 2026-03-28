@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CLMM - LAB</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f9f9f7",
+                        "primary": "#283424",
+                        "on-surface": "#1a1c1b",
+                        "surface-container-low": "#f4f4f2",
+                    },
+                    fontFamily: {
+                        "headline": ["Inter Tight"],
+                        "body": ["Inter"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            /* 沿用总监调好的缩放比例 */
+            --zoom: 0.9; 
+        }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background-color: #f9f9f7; }
+        h1, h2, h3, .font-tight { font-family: 'Inter Tight', sans-serif; letter-spacing: 0.1em; }
+        
+        /* 坐标纸网格底纹 */
+        .grid-pattern { 
+            background-image: 
+                linear-gradient(rgba(62, 75, 57, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(62, 75, 57, 0.08) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        /* 导航栏动态效果 */
+        #main-nav { transition: background-color 0.5s ease-in-out; }
+        .scrolled#main-nav { background-color: #3E4B39 !important; }
+        .scrolled #nav-brand, .scrolled .nav-link { color: #F9F9F7 !important; }
+        .scrolled .nav-btn-active { background-color: #F9F9F7 !important; color: #3E4B39 !important; }
+        .scrolled .nav-btn-outline { border-color: #F9F9F7 !important; color: #F9F9F7 !important; }
+        /* --- 剪贴簿核心样式 (总监调优版) --- */
+        .oval-clip { 
+            clip-path: ellipse(45% 50% at 50% 50%); 
+            width: 100%;
+        }
+        .canvas-container {
+            width: 95%;
+            max-width: 1400px;
+            aspect-ratio: 1400 / 1080;
+            position: relative;
+            margin: 10px auto;
+        }
+        .img-layer {
+            position: absolute;
+            transform: scale(var(--zoom));
+            transform-origin: top left;
+        }
+        .img-layer img {
+            width: 100%; height: auto; display: block;
+            border: none !important; box-shadow: none !important;
+        }
+        .align-right {
+            right: 0;
+            transform-origin: top right;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+    <nav class="fixed top-0 w-full z-[120] bg-[#F9F9F7]/90 backdrop-blur-md" id="main-nav">
+        <div class="flex justify-between items-center px-8 py-6 max-w-[1440px] mx-auto">
+            <div class="text-xl font-black tracking-[0.1em] text-[#3E4B39] uppercase font-tight leading-none" id="nav-brand">CLMM STUDIO</div>
+            <div class="hidden md:flex items-center gap-3 justify-end leading-none">
+                <a class="nav-btn nav-btn-outline nav-link text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="index.html">HOME</a>
+                <a class="nav-btn nav-btn-outline nav-link text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="work.html">WORK</a>
+                <a class="nav-btn nav-btn-active bg-[#3E4B39] text-[#F9F9F7] rounded-full w-24 py-2 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="lab.html">LAB</a>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-[72px]">
+        <header class="grid-pattern border-y border-[#3E4B39] w-full relative overflow-hidden py-12">
+            <div class="px-8 max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+                <div class="max-w-2xl shrink-0">
+                    <h1 class="text-7xl md:text-[10rem] font-black text-primary leading-[0.85] mb-0 font-tight tracking-tight uppercase">LAB</h1>
+                </div>
+                <div class="flex-1 flex flex-col items-end text-right translate-x-12 md:translate-x-32 select-none">
+                    <p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">DESIGN</p>
+                    <p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">& VISION</p>
+                </div>
+            </div>
+        </header>
+        <section class="grid-pattern px-0 pb-32 w-full pt-16">
+            <div class="max-w-[1400px] mx-auto px-8 mb-6 relative z-[100]">
+                <div class="inline-block border border-[#3E4B39]/20 px-2 py-0.5 text-[10px] font-black mb-2 text-[#3E4B39]/60 tracking-widest font-tight leading-none uppercase">LAB_NOTE_01</div>
+                <h2 class="text-6xl font-black text-[#3E4B39] font-tight leading-[0.9] uppercase tracking-tighter">HOBBIES<br>LAB</h2>
+            </div>
+            <div class="canvas-container">
+                <div class="img-layer top-[10%] left-0 w-[28%] z-20">
+                    <div class="oval-clip relative overflow-hidden bg-[#eeeeec]">
+                        <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_05.webp" referrerpolicy="no-referrer">
+                    </div>
+                </div>
+                <div class="img-layer top-[-3%] left-[28%] w-[28%] z-[50]">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_06.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer align-right top-[-3%] w-[25%] z-10">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_02.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer align-right top-[13%] w-[42%] z-30">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_01.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer top-[17%] left-[47%] w-[18%] z-[5]">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_010.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer align-right top-[34%] w-[20%] z-40">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_07.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer top-[40%] left-[27%] w-[56%] z-[60]">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_04.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer bottom-[10%] right-[11%] w-[14%] z-50">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_08.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer align-right bottom-[10%] w-[11.5%] z-50">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_09.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="img-layer top-[76%] left-[14%] w-[18%] z-50">
+                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_03.webp" referrerpolicy="no-referrer">
+                </div>
+                <div class="absolute bottom-[12%] left-[2%] z-50">
+                    <div class="text-[10px] font-black text-[#3E4B39]/50 space-y-0.5 uppercase tracking-widest font-tight leading-none">
+                        <p>#BOARD GAME</p><p>#SPORTS</p><p>#TRAVEL</p><p>#VISION</p><p>#FOOD</p>
+                        <p>#MUSIC</p><p>#CAMP</p><p>#PLAY</p><p>#HEALTH</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="w-full py-12 px-8 border-t border-primary/5 bg-surface">
+        <div class="max-w-[1440px] mx-auto flex justify-between items-center">
+            <div class="text-sm font-black tracking-[0.1em] text-[#3E4B39] uppercase font-tight leading-none">CLMM STUDIO</div>
+            <div class="text-[10px] font-bold tracking-widest text-primary/20 uppercase font-tight leading-none">©2026 CLJIMMY</div>
+        </div>
+    </footer>
+    <script>
+        // 导航滚动效果
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (window.scrollY > 50) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
