@@ -37,9 +37,9 @@
         /* 坐标纸网格底纹 */
         .grid-pattern { 
             background-image: 
-                linear-gradient(rgba(62, 75, 57, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(62, 75, 57, 0.08) 1px, transparent 1px);
-            background-size: 16px 16px;
+                linear-gradient(rgba(62, 75, 57, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(62, 75, 57, 0.05) 1px, transparent 1px);
+            background-size: 12px 12px;
         }
         /* 导航栏动态效果 */
         #main-nav { transition: background-color 0.5s ease-in-out; }
@@ -72,77 +72,132 @@
             right: 0;
             transform-origin: top right;
         }
+        .hamburger-box {
+            width: 24px;
+            height: 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .hamburger-line {
+            width: 100%;
+            height: 2px; /* 变成整数 2px，或者 1px (如果你想要极细感) */
+            background-color: #3E4B39;
+            border-radius: 10px; /* 加一点点圆角，看起来更高级 */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* 当菜单打开时，汉堡变“叉号”的动效 */
+        .is-active .hamburger-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .is-active .hamburger-line:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .is-active .hamburger-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        #main-nav.scrolled .hamburger-line {
+            background-color: #F9F9F7 !important;
+        }
+        @media (max-width: 767px) {
+        /* 1. 当导航栏变绿时，下拉列表的背景也要跟着变绿 */
+        #main-nav.scrolled #nav-links {
+            background-color: #3E4B39 !important;
+            border-bottom: 1px solid rgba(249, 249, 247, 0.1);
+        }
+        /* 2. 当导航栏变绿时，原本是“绿底”的高亮按钮，要变成“白底绿字” */
+        /* 否则高亮按钮在绿色背景下就看不见了 */
+        #main-nav.scrolled .nav-btn-active {
+            background-color: #F9F9F7 !important;
+            color: #3E4B39 !important;
+        }
+        /* 3. 确保普通按钮在绿底时文字是白的 */
+        #main-nav.scrolled .nav-btn-outline {
+            color: #F9F9F7 !important;
+            border-color: #F9F9F7 !important;
+        }
+    }
     </style>
 </head>
 <body class="bg-surface text-on-surface">
     <nav class="fixed top-0 w-full z-[120] bg-[#F9F9F7]/90 backdrop-blur-md" id="main-nav">
-        <div class="flex justify-between items-center px-8 py-6 max-w-[1440px] mx-auto">
-            <div class="text-xl font-black tracking-[0.1em] text-[#3E4B39] uppercase font-tight leading-none" id="nav-brand">CLMM STUDIO</div>
-            <div class="hidden md:flex items-center gap-3 justify-end leading-none">
-                <a class="nav-btn nav-btn-outline nav-link text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="index.html">HOME</a>
-                <a class="nav-btn nav-btn-outline nav-link text-[#3E4B39] border border-[#3E4B39] rounded-full w-24 py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="work.html">WORK</a>
-                <a class="nav-btn nav-btn-active bg-[#3E4B39] text-[#F9F9F7] rounded-full w-24 py-2 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="lab.html">LAB</a>
+    <div class="flex justify-between items-center px-8 py-6 max-w-[1440px] mx-auto">
+        <div class="text-xl font-black tracking-[0.1em] text-[#3E4B39] uppercase font-tight leading-none" id="nav-brand">CLMM STUDIO</div>
+        
+        <button class="md:hidden p-2 focus:outline-none" id="mobile-menu-btn">
+            <div class="hamburger-box">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </div>
+        </button>
+        <div class="hidden md:flex flex-col md:flex-row absolute md:relative top-full left-0 w-full md:w-auto bg-[#F9F9F7] md:bg-transparent border-b md:border-none border-primary/10 p-8 md:p-0 items-center gap-3 justify-end leading-none" id="nav-links">
+            <a class="nav-btn nav-btn-outline text-[#3E4B39] border border-[#3E4B39] rounded-full w-full md:w-24 py-3 md:py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="index.html">HOME</a>
+            <a class="nav-btn nav-btn-outline text-[#3E4B39] border border-[#3E4B39] rounded-full w-full md:w-24 py-3 md:py-2 hover:bg-[#3E4B39]/5 transition-all font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="work.html">WORK</a>
+            <a class="nav-btn nav-btn-active bg-[#3E4B39] text-[#F9F9F7] rounded-full w-full md:w-24 py-3 md:py-2 font-tight text-xs font-bold hover:scale-105 text-center flex items-center justify-center" href="lab.html">LAB</a>
         </div>
+    </div>
     </nav>
     <main class="pt-[72px]">
-        <header class="grid-pattern border-y border-[#3E4B39] w-full relative overflow-hidden py-12">
-            <div class="px-8 max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-                <div class="max-w-2xl shrink-0">
-                    <h1 class="text-7xl md:text-[10rem] font-black text-primary leading-[0.85] mb-0 font-tight tracking-tight uppercase">LAB</h1>
+        <header class="grid-pattern border-y border-[#3E4B39] w-full relative overflow-hidden py-2">
+    
+            <div class="px-8 max-w-[1440px] mx-auto flex items-center justify-between relative z-10">
+        
+                <div class="max-w-2xl shrink-0 relative z-20">
+                    <h1 class="text-9xl md:text-[10rem] font-black text-primary leading-[0.85] mb-0 font-tight tracking-tight uppercase">LAB</h1>
                 </div>
-                <div class="flex-1 flex flex-col items-end text-right translate-x-12 md:translate-x-32 select-none">
-                    <p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">DESIGN</p>
-                    <p class="text-[clamp(4rem,15vw,12rem)] font-black italic leading-[0.75] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">& VISION</p>
+
+                <div class="
+                    /* 手机端：绝对定位并垂直居中，这样它就不会把 Header 顶高 */
+                    absolute md:relative right-0 top-1/2 -translate-y-1/2 md:top-0 md:translate-y-0
+                    /* 偏移：完全沿用你原版的 translate 逻辑 */
+                    translate-x-12 md:translate-x-32 
+                    /* 布局：靠右，置底，不响应点击 */
+                    flex-1 flex flex-col items-end text-right z-0 pointer-events-none select-none
+                ">
+                    <p class="text-[6rem] md:text-[12rem] font-black italic leading-[0.74] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">DESIGN</p>
+                    <p class="text-[6rem] md:text-[12rem] font-black italic leading-[0.74] tracking-tighter text-primary/10 whitespace-nowrap uppercase font-tight">& VISION</p>
                 </div>
             </div>
         </header>
-        <section class="grid-pattern px-0 pb-32 w-full pt-16">
-            <div class="max-w-[1400px] mx-auto px-8 mb-6 relative z-[100]">
-                <div class="inline-block border border-[#3E4B39]/20 px-2 py-0.5 text-[10px] font-black mb-2 text-[#3E4B39]/60 tracking-widest font-tight leading-none uppercase">LAB_NOTE_01</div>
-                <h2 class="text-6xl font-black text-[#3E4B39] font-tight leading-[0.9] uppercase tracking-tighter">HOBBIES<br>LAB</h2>
+        <section class="grid-pattern px-0 pb-32 w-full pt-16 relative">
+    <div class="max-w-[1400px] mx-auto px-8 mb-6 relative z-[100]">
+        <div class="inline-block border border-[#3E4B39]/20 px-2 py-0.5 text-[10px] font-black mb-2 text-[#3E4B39]/60 tracking-widest font-tight leading-none uppercase">LAB_NOTE_01</div>
+        <h2 class="text-6xl font-black text-[#3E4B39] font-tight leading-[0.9] uppercase tracking-tighter">HOBBIES<br>LAB</h2>
+    </div>
+
+    <div class="canvas-container">
+        <div class="img-layer top-[10%] left-0 w-[28%] z-20">
+            <div class="oval-clip relative overflow-hidden bg-[#eeeeec]">
+                <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_05.webp" referrerpolicy="no-referrer">
             </div>
-            <div class="canvas-container">
-                <div class="img-layer top-[10%] left-0 w-[28%] z-20">
-                    <div class="oval-clip relative overflow-hidden bg-[#eeeeec]">
-                        <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_05.webp" referrerpolicy="no-referrer">
-                    </div>
-                </div>
-                <div class="img-layer top-[-3%] left-[28%] w-[28%] z-[50]">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_06.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer align-right top-[-3%] w-[25%] z-10">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_02.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer align-right top-[13%] w-[42%] z-30">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_01.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer top-[17%] left-[47%] w-[18%] z-[5]">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_010.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer align-right top-[34%] w-[20%] z-40">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_07.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer top-[40%] left-[27%] w-[56%] z-[60]">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_04.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer bottom-[10%] right-[11%] w-[14%] z-50">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_08.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer align-right bottom-[10%] w-[11.5%] z-50">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_09.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="img-layer top-[76%] left-[14%] w-[18%] z-50">
-                    <img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_03.webp" referrerpolicy="no-referrer">
-                </div>
-                <div class="absolute bottom-[12%] left-[2%] z-50">
-                    <div class="text-[10px] font-black text-[#3E4B39]/50 space-y-0.5 uppercase tracking-widest font-tight leading-none">
-                        <p>#BOARD GAME</p><p>#SPORTS</p><p>#TRAVEL</p><p>#VISION</p><p>#FOOD</p>
-                        <p>#MUSIC</p><p>#CAMP</p><p>#PLAY</p><p>#HEALTH</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+        <div class="img-layer top-[-3%] left-[28%] w-[28%] z-[50]"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_06.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer align-right top-[-3%] w-[25%] z-10"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_02.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer align-right top-[13%] w-[42%] z-30"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_01.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer top-[17%] left-[47%] w-[18%] z-[5]"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_010.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer align-right top-[34%] w-[20%] z-40"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_07.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer top-[40%] left-[27%] w-[56%] z-[60]"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_04.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer bottom-[10%] right-[11%] w-[14%] z-50"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_08.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer align-right bottom-[10%] w-[11.5%] z-50"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_09.webp" referrerpolicy="no-referrer"></div>
+        <div class="img-layer top-[76%] left-[14%] w-[18%] z-50"><img src="https://clmm-portfolio-assets.vercel.app/lab/Lab_page_03.webp" referrerpolicy="no-referrer"></div>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto px-8 relative">
+        <div class="
+            /* 手机端样式：相对定位，正常排版，距离图片上方有 48px 间距 */
+            relative mt-1 
+            /* 电脑端样式 (md以上)：变回绝对定位，飞回图片层左下角 */
+            md:absolute md:bottom-[60px] md:left-8 md:mt-0 z-50
+            text-[10px] font-black text-[#3E4B39]/50 space-y-0.5 uppercase tracking-widest font-tight leading-none
+        ">
+            <p>#BOARD GAME</p><p>#SPORTS</p><p>#TRAVEL</p><p>#VISION</p><p>#FOOD</p>
+            <p>#MUSIC</p><p>#CAMP</p><p>#PLAY</p><p>#HEALTH</p>
+        </div>
+    </div>
+</section>
     </main>
     <footer class="w-full py-12 px-8 border-t border-primary/5 bg-surface">
         <div class="max-w-[1440px] mx-auto flex justify-between items-center">
@@ -151,14 +206,26 @@
         </div>
     </footer>
     <script>
-        // 导航滚动效果
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('main-nav');
-            if (nav) {
-                if (window.scrollY > 50) nav.classList.add('scrolled');
-                else nav.classList.remove('scrolled');
-            }
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            // 切换菜单显示/隐藏
+            navLinks.classList.toggle('hidden');
+            navLinks.classList.toggle('flex');
+            
+            // 核心补丁：切换汉堡图标的动画状态
+            menuBtn.classList.toggle('is-active');
         });
+    }
+
+    // 导航背景滚动效果（保留）
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('main-nav');
+        if (nav && window.scrollY > 50) nav.classList.add('scrolled');
+        else if (nav) nav.classList.remove('scrolled');
+    });
     </script>
 </body>
 </html>
